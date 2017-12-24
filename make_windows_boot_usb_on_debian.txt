@@ -1,0 +1,74 @@
+
+#show disks list for detect usb disk
+sudo fdisk -l
+#my disk is sdd
+
+#unmount usb disk
+sudo umount /dev/sdd
+
+#create partition on usb disk
+sudo fdisk sdd
+
+    #show partitions
+    option: p
+    #delete exist partition on usb
+    option: d
+    #create new partition on usb
+    option: n (select primary and all default to create one partition on all disk.)
+    option: t (select 7 HPFS/NTFS/exFAT)
+    option: a (to create boot disk)
+    option: p (to  make sure the Boot column has an asterisk (*) set and the Id column is set to 7)
+    option: w (only if all okey to write changes on disk)
+
+#format usb disk
+sudo apt-get install ntfs-3g (if package not installed)
+sudo mkfs.ntfs -f /dev/sdd1
+
+#copy files from Windows.iso on usb disk
+    #create directory for mount usb disk
+    sudo mkdir /mnt/usb
+    sudo mount  /dev/sdd1 /mnt/usb
+    #create directory to mount WIndows iso
+    sudo mkdir /mnt/iso
+    sudo mount /home/sergio/tmp/Win10_1709_Russian_x64.iso /mnt/iso (/home/sergio - it's my home catalog)
+    #copy files
+    sudo cp -av /mnt/iso/* /mnt/usb/
+
+#make mbr bootable usb disk
+    sudo apt-get install grub-pc-bin (if not installed)
+    sudo grub-install --target=i386-pc --boot-directory="/mnt/usb/boot" /dev/sdd
+    Installing for i386-pc platform. 
+    Installation finished. No error reported.
+
+#create grub.cfg
+
+sudo touch /mnt/usb/boot/grub/grub.cfg
+add to grub.cfg info below:
+
+default=1
+timeout=15
+color_normal=light-cyan/dark-gray
+menu_color_normal=black/light-cyan
+menu_color_highlight=white/black
+
+menuentry "Start Windows Installation" {
+    insmod ntfs
+    insmod search_label
+    search --no-floppy --set=root --hint hd0,msdos1
+    ntldr /bootmgr
+    boot
+}
+
+menuentry "Boot from the first hard drive" {
+    insmod ntfs
+    insmod chain
+    insmod part_msdos
+    insmod part_gpt
+    set root=(hd1)
+    chainloader +1
+    boot
+}
+
+
+
+
