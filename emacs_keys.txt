@@ -1,0 +1,5 @@
+;;== update melpa packages
+M-x list-packages
+shift-u x
+C-x k <ret>
+;;== end update melpa packages
