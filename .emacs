@@ -15,27 +15,90 @@
 (setq ring-bell-function 'ignore)
 
 
+;(require 'package)
+;(add-to-list 'package-archives
+;             '("melpa" . "http://melpa.org/packages/") t)
+;(package-initialize)
+;;(require 'auto-complete)
+;;(require 'auto-complete-config)
+;;(ac-config-default)
+
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
+
 (require 'auto-complete)
 (require 'auto-complete-config)
 (ac-config-default)
 
-; start yasnippet with emacs
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
+;(require 'diminish)
+(require 'bind-key)
+
+
+;; start yasnippet with emacs
 (require 'yasnippet)
 (yas-global-mode 1)
-; let's define a function which initializes auto-complete-c-headers and gets called for c/c++ hooks
+;; let's define a function which initializes auto-complete-c-headers and gets called for c/c++ hooks
 (defun my:ac-c-header-init ()
   (require 'auto-complete-c-headers)
   (add-to-list 'ac-sources 'ac-source-c-headers)
   (add-to-list 'achead:include-directories '"/usr/include/c++/6")
 )
-; now let's call this function from c/c++ hooks
+;; now let's call this function from c/c++ hooks
 (add-hook 'c++-mode-hook 'my:ac-c-header-init)
 (add-hook 'c-mode-hook 'my:ac-c-header-init)
 
+;;C++ begin
+
+;; == irony-mode ==
+(use-package irony
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  :config
+  ;; replace the `completion-at-point' and `complete-symbol' bindings in
+  ;; irony-mode's buffers by irony-mode's function
+  (defun my-irony-mode-hook ()
+    (define-key irony-mode-map [remap completion-at-point]
+      'irony-completion-at-point-async)
+    (define-key irony-mode-map [remap complete-symbol]
+      'irony-completion-at-point-async))
+  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  )
+
+(setq irony-additional-clang-options '("-std=c++11"))
+
+;; == company-mode ==
+(use-package company
+  :ensure t
+  :defer t
+  :init (add-hook 'after-init-hook 'global-company-mode)
+  :config
+  (use-package company-irony :ensure t :defer t)
+  (setq company-idle-delay              nil
+    company-minimum-prefix-length   2
+    company-show-numbers            t
+    company-tooltip-limit           20
+    company-dabbrev-downcase        nil
+    company-backends                '((company-irony company-gtags))
+    )
+  :bind ("C-;" . company-complete-common)
+  )
+
+;;C++ end
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
