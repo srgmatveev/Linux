@@ -164,7 +164,8 @@
 ;; Format the title-bar to always include the buffer name
 (setq frame-title-format "emacs – %b")
 ;; Display time
-(display-time)
+(setq display-time-24hr-format t) ;; 24-часовой временной формат в mode-line
+(display-time-mode             t) ;; показывать часы в mode-line
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
 ;; Always end a file with a newline
@@ -180,7 +181,6 @@
 ;; Use y or n instead of yes or not
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(setq display-time-format "%I:%M:%S")
 
 ;;activate show paren
 (show-paren-mode t)   
@@ -189,3 +189,4 @@
 
 
 
+(put 'set-goal-column 'disabled nil)
