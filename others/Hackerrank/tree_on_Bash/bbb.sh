@@ -1,0 +1,1 @@
+./bbb1.sh 5 >bbb.txt
