@@ -2,15 +2,17 @@
 #define LIST_REVERSE_HPP
 #include <string>
 using namespace std;
+
+template <class T>
 class Node {
 private:
-	string node_value;
+	T node_value;
 	Node* next_node;
 public:
 
 	Node(): node_value{}, next_node{nullptr} {}
-	Node(const string& node_value): node_value{node_value}, next_node{nullptr} {}
-	const string& get_node_value() {
+	Node(const T& node_value): node_value{node_value}, next_node{nullptr} {}
+	const T& get_node_value() {
 		return node_value;
 	}
 
@@ -29,13 +31,13 @@ public:
 
 
 };
-
+template <class T>
 class List_Nodes {
 private:
-	Node* head;
+	Node<T>* head;
 public:
 	List_Nodes();
-	void add_node(Node*);
+	void add_node(Node<T>*);
 	virtual ~List_Nodes();
 	void print_nodes();
 	void reverse_nodes();

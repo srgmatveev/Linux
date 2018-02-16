@@ -3,28 +3,29 @@
 #include "list_reverse.hpp"
 
 using namespace std;
-
-List_Nodes::List_Nodes(): head{nullptr} {
+template <class T>
+List_Nodes<T>::List_Nodes(): head{nullptr} {
 
 	std::cout << "Create List_Nodes" << std::endl;
 }
 
-List_Nodes::~List_Nodes() {
+template <class T>
+List_Nodes<T>::~List_Nodes() {
 	std::cout << "Delete List_Nodes" << std::endl;
-	Node* cur_node = head;
+	Node<T>* cur_node = head;
 
 	while (cur_node) {
-		Node *tmp = cur_node;
+		Node<T> *tmp = cur_node;
 		cur_node = cur_node->get_next_node();
 		if (tmp) delete tmp;
 	}
 }
-
-void List_Nodes::add_node(Node* node) {
+template <class T>
+void List_Nodes<T>::add_node(Node<T>* node) {
 
 	if (!head) {head = node; return;}
 
-	Node* cur_node = head;
+	Node<T>* cur_node = head;
 
 	while (cur_node->get_next_node()) {
 
@@ -34,22 +35,23 @@ void List_Nodes::add_node(Node* node) {
 	cur_node->set_next_node(node);
 }
 
-void List_Nodes::print_nodes() {
+template <class T>
+void List_Nodes<T>::print_nodes() {
 
-	Node * cur_node = head;
+	Node<T> * cur_node = head;
 	while (cur_node) {
 		cout << cur_node->get_node_value() << endl;
 		cur_node = cur_node->get_next_node();
 	}
 }
 
-
-void List_Nodes::reverse_nodes() {
+template <class T>
+void List_Nodes<T>::reverse_nodes() {
 	if (!head || !head->get_next_node()) return;
 
-	Node* cur_node = head;
-	Node* prev_node = nullptr;
-	Node* next_node = nullptr;
+	Node<T>* cur_node = head;
+	Node<T>* prev_node = nullptr;
+	Node<T>* next_node = nullptr;
 
 	while (cur_node) {
 		next_node = cur_node->get_next_node();
@@ -65,11 +67,11 @@ void List_Nodes::reverse_nodes() {
 int main(int argc, char const *argv[])
 {
 
-	List_Nodes *list = new List_Nodes();
+	List_Nodes<std::string> *list = new List_Nodes<std::string>();
 
-	Node *my_node = new Node("Первая нода");
-	Node *my_second_node = new Node("Вторая нода");
-	Node *my_third_node = new Node("Третья нода");
+	Node<std::string> *my_node = new Node<std::string>("Первая нода");
+	Node<std::string> *my_second_node = new Node<std::string>("Вторая нода");
+	Node<std::string> *my_third_node = new Node<std::string>("Третья нода");
 	list->add_node(my_node);
 	list->add_node(my_second_node);
 	list->add_node(my_third_node);
@@ -82,5 +84,24 @@ int main(int argc, char const *argv[])
 	list->print_nodes();
 	cout << "========================\n";
 	if (list) { delete list;}
+
+	List_Nodes<int> *list1 = new List_Nodes<int>();
+
+	Node<int> *my_node_int = new Node<int>(1);
+	Node<int> *my_second_node_int = new Node<int>(2);
+	Node<int> *my_third_node_int = new Node<int>(3);
+	list1->add_node(my_node_int);
+	list1->add_node(my_second_node_int);
+	list1->add_node(my_third_node_int);
+	list1->print_nodes();
+	list1->reverse_nodes();
+	cout << "========================\n";
+	list1->print_nodes();
+	list1->reverse_nodes();
+	cout << "========================\n";
+	list1->print_nodes();
+	cout << "========================\n";
+	if (list1) { delete list1;}
+
 	return 0;
 }
