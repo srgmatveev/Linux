@@ -1,6 +1,6 @@
 #include <iostream>
-#include <string>
 #include "list_reverse.hpp"
+
 
 using namespace std;
 template <class T>
@@ -66,7 +66,7 @@ void List_Nodes<T>::reverse_nodes() {
 
 int main(int argc, char const *argv[])
 {
-
+/*
 	List_Nodes<std::string> *list = new List_Nodes<std::string>();
 
 	Node<std::string> *my_node = new Node<std::string>("Первая нода");
@@ -102,6 +102,30 @@ int main(int argc, char const *argv[])
 	list1->print_nodes();
 	cout << "========================\n";
 	if (list1) { delete list1;}
+*/
 
+	List_Nodes<int*> *list_int = new List_Nodes<int*>();
+
+	int* one_p = new int(1);
+	int* two_p = new int(2);
+	int* third_p = new int(3);
+	Node<int*> *my_node_int_p = new Node<int*>(one_p);
+	Node<int*> *my_second_node_int_p = new Node<int*>(two_p);
+	Node<int*> *my_third_node_int_p = new Node<int*>(third_p);
+	list_int->add_node(my_node_int_p);
+	list_int->add_node(my_second_node_int_p);
+	list_int->add_node(my_third_node_int_p);
+	list_int->print_nodes();
+	list_int->reverse_nodes();
+	cout << "========================\n";
+	list_int->print_nodes();
+	list_int->reverse_nodes();
+	cout << "========================\n";
+	list_int->print_nodes();
+	cout << "========================\n";
+	if (list_int)  delete list_int;
+	if(one_p) delete one_p;
+	if(two_p) delete two_p;
+	if (third_p) delete third_p;
 	return 0;
 }
