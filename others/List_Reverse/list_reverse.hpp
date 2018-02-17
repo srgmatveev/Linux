@@ -2,6 +2,9 @@
 #define LIST_REVERSE_HPP
 
 #include <iostream>
+#include <cstring>
+#include <cwchar>
+
 using namespace std;
 
 template <class T>
@@ -42,10 +45,10 @@ private:
 public:
 
 	Node(): node_value{}, next_node{nullptr} {}
-	Node(T* node_value):  next_node{nullptr} {
+	Node(const T* node_value):  next_node{nullptr} {
 		this->node_value = new T;
 		*this->node_value = *node_value;
-		
+
 	}
 	const T& get_node_value() {
 		return *node_value;
@@ -62,11 +65,86 @@ public:
 
 	virtual ~Node() {
 		cout << "Delete *:" <<  *node_value << endl;
-		if (node_value) delete node_value;
+		if (node_value) delete[] node_value;
 	}
 
 
 };
+
+template <>
+class Node<char*> {
+private:
+	char* node_value;
+	Node* next_node;
+public:
+
+	Node(): node_value{nullptr}, next_node{nullptr} {}
+	Node(const char* node_value):  next_node{nullptr} {
+		this->node_value = new char[std::strlen(node_value) + 1];
+		std::strcpy(this->node_value, node_value);
+		cout << this->node_value << " " << std::strlen(this->node_value) << endl;
+	}
+	const char* get_node_value() {
+		return node_value;
+	}
+
+
+	Node* get_next_node() {
+		return this->next_node;
+	}
+
+	void set_next_node(Node *node) {
+		if (this != node) next_node = node;
+	}
+
+	virtual ~Node() {
+		cout << "Delete *:" <<  this->node_value << endl;
+
+		if (node_value) delete[] node_value;
+	}
+
+
+};
+
+
+template <>
+class Node<wchar_t*> {
+private:
+	wchar_t* node_value;
+	Node* next_node;
+public:
+
+	Node(): node_value{nullptr}, next_node{nullptr} {}
+	Node(const wchar_t* node_value):  next_node{nullptr} {
+	
+		this->node_value = new wchar_t[std::wcslen(node_value) + 1];
+		std::wcscpy(this->node_value,node_value);
+		
+	}
+
+	const wchar_t* get_node_value() {
+		
+		return node_value;
+	}
+
+
+	Node* get_next_node() {
+		return this->next_node;
+	}
+
+	void set_next_node(Node *node) {
+		if (this != node) next_node = node;
+	}
+
+	virtual ~Node() {
+		wcout << L"Delete *:" <<  this->node_value << endl;
+
+		if (node_value) delete[] node_value;
+	}
+
+
+};
+
 
 template <class T>
 class List_Nodes {
@@ -77,6 +155,7 @@ public:
 	void add_node(Node<T>*);
 	virtual ~List_Nodes();
 	void print_nodes();
+	void print_unicode_nodes();
 	void reverse_nodes();
 };
 
