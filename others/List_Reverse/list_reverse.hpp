@@ -116,14 +116,14 @@ public:
 
 	Node(): node_value{nullptr}, next_node{nullptr} {}
 	Node(const wchar_t* node_value):  next_node{nullptr} {
-	
+
 		this->node_value = new wchar_t[std::wcslen(node_value) + 1];
-		std::wcscpy(this->node_value,node_value);
-		
+		std::wcscpy(this->node_value, node_value);
+
 	}
 
 	const wchar_t* get_node_value() {
-		
+
 		return node_value;
 	}
 
@@ -157,6 +157,9 @@ public:
 	void print_nodes();
 	void print_unicode_nodes();
 	void reverse_nodes();
+	void reverse_nodes_recursively(Node<T>*, Node<T>* = NULL);
+	Node<T>* get_head();
+	void set_head(Node<T>*); 
 };
 
 #endif
