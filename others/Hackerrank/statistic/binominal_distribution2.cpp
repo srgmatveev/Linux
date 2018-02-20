@@ -7,10 +7,13 @@
 #include <iomanip>
 using namespace std;
 /** @mainpage
-**The ratio of boys to girls for babies born in Russia is 1.09 : 1.
-**If there is 1 child born per birth,
-**what proportion of Russian families
-**with exactly 6 children will have at least 3  boys?
+**A manufacturer of metal pistons finds that, on average,
+**12% of the pistons they manufacture are rejected because they are incorrectly sized. 
+**What is the probability that a batch of 10 pistons will contain:
+**
+**    No more than 2 rejects?
+**    At least 2rejects?
+**
 */
 
 /**
@@ -35,6 +38,7 @@ double comb(int n, int x) {
 ** @return binomial probability
 */
 double b(int x, int n, double p) {
+    
     return (double) comb(n, x) * pow(p, x) * pow((1 - p), (n - x));
 }
 
@@ -49,14 +53,17 @@ double sum(int range_beg, int range_end , int n,  double value) {
 #define DEBUG
 
 int main() {
-    double boys{0}, girls{0};
+    double reject_percent{0};
+    int n{0};
 #ifdef DEBUG
-    boys = 1.09;
-    girls = 1;
+    reject_percent = 12;
+    n = 10;
 #else
-    std::cin>>boys>>girls;
+    std::cin>>reject_percent>>n;
 #endif
-    if (boys + girls == 0) return -1;
-    std::cout << std::setprecision(3) << std::fixed << sum(3, 6 , 6, boys / (boys + girls) ) << std::endl;
+    
+    std::cout << std::setprecision(3) << std::fixed << sum(8, 10 , n, (double)(1-reject_percent/100) ) << std::endl;
+    std::cout << std::setprecision(3) << std::fixed << sum(2, 10 , n, (double)reject_percent/100 ) << std::endl;
+    
     return 0;
 }
